@@ -14,7 +14,8 @@
   "dependencies": {
     "@sentry/browser": "^7.11.1",
     "@sentry/tracing": "^7.11.1",
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "mongoose": "^6.2.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
