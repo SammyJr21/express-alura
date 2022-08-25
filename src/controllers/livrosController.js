@@ -1,23 +1,29 @@
-import livros from '../models/Livro.js';
+import livros from '../models/livro.js';
 
 class LivroController {
   static listarLivros = (req, res) => {
-    livros.find((err, livros) => {
-      res.status(200).json(livros);
-    });
+    livros
+      .find()
+      .populate('autor')
+      .exec((err, livros) => {
+        res.status(200).json(livros);
+      });
   };
   static listarLivrosPorId = (req, res) => {
     const id = req.params.id;
 
-    livros.findById(id, (err, livros) => {
-      if (err) {
-        res
-          .status(400)
-          .send({ message: `${err.message} - Id do livro nao localizado` });
-      } else {
-        res.status(200).send(livros);
-      }
-    });
+    livros
+      .findById(id)
+      .populate('autor', 'nome')
+      .exec((err, livros) => {
+        if (err) {
+          res
+            .status(400)
+            .send({ message: `${err.message} - Id do livro nao localizado` });
+        } else {
+          res.status(200).send(livros);
+        }
+      });
   };
   static cadastarLivro = (req, res) => {
     let livro = new livros(req.body);
@@ -49,6 +55,12 @@ class LivroController {
       } else {
         res.status(500).send({ message: err.message });
       }
+    });
+  };
+  static listarLivroPorEditora = (req, res) => {
+    const editora = req.query.editora;
+    livros.find({ editora: editora }, {}, (err, livros) => {
+      res.status(200).send(livros);
     });
   };
 }
